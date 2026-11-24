@@ -43,7 +43,15 @@ def check(text: str) -> None:
             raise SystemExit(f"line {i} must be exactly one sentence")
 
 
+def _guard_output_dir(path: str) -> None:
+    """Refuse an output path that exists as a file, not a directory."""
+    p = Path(path)
+    if p.exists() and not p.is_dir():
+        raise SystemExit(f"output path {path} is not a directory")
+
+
 check(TEXT)
 
+_guard_output_dir(OUTPUT_DIR)
 Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
 Path(OUTPUT_DIR, "entry.txt").write_text(TEXT, encoding="utf-8")
